@@ -1,0 +1,4 @@
+/self_service/app_config.py
+/self_service/__pycache__/
+/self_service/flask_session/
+/flask_session/

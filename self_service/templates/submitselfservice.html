@@ -1,0 +1,20 @@
+{% extends "layout.html" %} {% block title %}Self Service has now been created{% endblock %}
+{% block script %} {% endblock %} {% block content %}
+<div>
+  <h1 style="text-align: center;">Self Service has now been created as a draft</h1>
+  <div class="card">
+    <div id="form">
+      <div class="card-textbox" style="margin: auto; padding: 15px;">
+            <div>
+              <label for="Options-available" style="word-wrap: break-word">
+                Your new self service:</br>
+                <strong>{{ self_service_name }}</strong></br>
+                Has now been created as a draft you have permissions to view it in the non published secton and have to wait for someone else to
+                approve and publish it before it is available for people to request.
+                </br>
+              </label></br>
+            </div>
+    </div>
+  </div>
+  </div>
+{% endblock content %}

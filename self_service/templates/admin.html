@@ -1,0 +1,49 @@
+{% extends "layout.html" %} {% block title %}Home{% endblock %} {% block content
+    %}
+    {% if 'Self_Service_Admins' in roles %}
+    <div id="center">
+    <div>
+    <h1 style="font-size=25px">Hello {{ user.get("name") }}</h1>
+    <p>
+        I see you have become an Admin.</br>
+        This here is the admin page this is where you are able to create new self services aswell as changing already exsisting ones.</br>
+        Good luck on your journey to automate BESTSELLER & BESTSELLER TECH</br>
+    </p>
+    </div>
+    <div class="card">
+        <a href="create_selfservice">
+          <div class="row-align-center">
+            <div class="card-box-admin">
+              <div class="top-line">
+                <h4><strong>Create new self service</strong></h4>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="card">
+        <a href="modify_selfservice">
+          <div class="row-align-center">
+            <div class="card-box-admin">
+              <div class="top-line">
+                <h4><strong>Modify exsisting self service</strong></h4>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="card">
+        <a href="draft_selfservice">
+          <div class="row-align-center">
+            <div class="card-box-admin">
+              <div class="top-line">
+                <h4><strong>See drafts that has not yet been approved</strong></h4>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    {% endif %}
+    {% endblock %}
+    

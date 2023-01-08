@@ -1,0 +1,9 @@
+{% extends "layout.html" %}{% block title %}Thank you{% endblock %} 
+{% block content %}
+<ul>
+    {% for suggestion in suggestions %}
+        <li>{{ suggestion }}</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

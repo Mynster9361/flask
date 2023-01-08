@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Self-Service
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h4><strong>{{ name }}</strong></h4>
+      <div class="row-align-center">
+          <p class="card-textboxbotp">{{ description }}</p>
+      </div>
+      <div class="row-align-center">
+        <p class="card-textboxbotp">{{ service_actions }}</p>
+    </div>
+  </div>
+
+{% endblock %}

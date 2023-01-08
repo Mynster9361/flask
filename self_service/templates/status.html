@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+  Status
+{% endblock %}
+
+{% block content %}
+
+  <h1 style="text-align: center;">Status</h1>
+
+<div class="table">
+  <table>
+    <tr>
+      <th style="width: 100px;">Request ID</th>
+      <th>Subject</th>
+      <th>Status</th>
+    </tr>
+    
+    {% for item in items %}
+      <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.subject }}</td>
+        <td>{{ item.status }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

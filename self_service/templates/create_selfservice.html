@@ -1,0 +1,59 @@
+{% extends "layout.html" %} {% block title %}Create Self-Service{% endblock %}
+{% block script %} {% endblock %} {% block content %}
+<div>
+  <h1 style="text-align: center;">Create new self service</h1>
+  <div class="card">
+    <div id="form">
+      <div class="card-textbox" style="margin: auto; padding: 15px;">
+      <form id="form" action="/submitselfservice" method="POST">
+          <div class="row-align-center">
+              <label for="SelfServiceName">SelfService Name: </label>
+              <input type="text" id="SelfServiceName" name="SelfServiceName" value="{{ my_variable }}"></br>
+            </div>
+            <div class="row-align-center">
+              <label for="AccessTo">AccessTo: </label>
+              <input type="text" id="AccessTo" name="AccessTo" placeholder="The default is everyone"> </br>
+            </div>
+            <div class="row-align-center">
+              <label for="Runbook">Please input the Runbook name: </label>
+              <input type="text" id="Runbook" name="Runbook"> </br>
+            </div>
+            <div>
+              <label for="description">
+                Please provide a description for the self service
+              </label>
+              <textarea style="width:100%;height:50px" id="description" name="description" placeholder="Please input a short description"></textarea><br>
+              
+              <label for="SelfService">SelfService:</label>
+              <label for="Documentation">
+                Documentation can be seen below the textbox </br>
+                Please note that the fields is presented in the order that you input the fields
+              </label>
+              <textarea style="width:100%;height:300px" id="selfserviceaction" name="selfserviceaction" placeholder="Please input your string of text and seperate all options with a new line"></textarea><br>
+              <input type="submit" value="Submit">
+              <label for="Options">You can use the following to create diffrent fields:</label>
+              <label for="Options-available" style="word-wrap: break-word">
+<strong>Text-Box:</strong></br>
+textbox:title="Please input the title of this textbox f.eks. ask user to input something":placeholder="example@domain.com":required="true/false"</br>
+<strong>Drop-Down:</strong></br>
+dropdown:title="Some title for your drop down f.eks. please select what you would like in the dropdown":options="'Adobe Photoshop','Adobe Reader','Adobe Aftereffets'":required="true/false"</br>
+<strong>To make it look into a database table for the options you can leave the options empty and add it like shown here:</strong></br>
+options="":table="tablename"</br>
+Please note that the table needs to be created in the database before it is able to show anything in the selfservice options menu</br>
+The same can be done with List-View</br>
+<strong>List-View:</strong></br>
+listview:title="Some title for your list view f.eks. please mark what you would like and press the arrow to add it to your request":options="'Adobe Photoshop','Adobe Reader','Adobe Aftereffets'":required="true/false"</br>
+<strong>Check-Box:</strong></br>
+checkbox:title="Some title for your checkboxes":amount="3":multiselect="false/true":options="'Adobe Photoshop','Adobe Reader','Adobe Aftereffets'":required="true/false"</br>
+<strong>Radio-Buttons:</strong></br>
+radio:title="Some title for your radio buttons":amount="3":options="'Adobe Photoshop','Adobe Reader','Adobe Aftereffets'":required="true/false"</br>
+<strong>Date:</strong></br>
+date:title="Some title for your date":full_date_time="false/true":first_run_on_sellected_time="true/false":required="true/false"</br>
+              
+              </label></br>
+            </div>
+        </form>
+    </div>
+  </div>
+  </div>
+{% endblock content %}

@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Self-Service
+{% endblock %}
+
+{% block content %}
+<h1 style="text-align: center">{{ header }}</h1>
+
+  {% for html in service_html %}
+  {{ html | safe }}
+  {% endfor %}
+
+{% endblock %}

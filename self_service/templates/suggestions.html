@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block title %}
+Suggestions
+{% endblock %} 
+{% block content %}
+<h1 style="text-align: center;">Suggestions</h1>
+<div class="card_suggestion">
+  <div id="form">
+    <div class="row-align-center">
+    <form id="form" action="/submit" method="POST">
+        <div class="row-align-center">
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email"></br>
+            <label for="subject">Subject:</label><br>
+            <input type="text" id="subject" name="subject"> </br>
+          </div>
+          <div>
+            <label for="suggestion">Suggestion:</label></br>
+            <textarea style="width:100%;height:150px" id="suggestion" name="suggestion"></textarea><br>
+            <input type="submit" value="Submit">
+          </div>
+      </form>
+  </div>
+</div>
+</div>
+{% endblock %}

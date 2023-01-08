@@ -1,0 +1,24 @@
+{% extends "layout.html" %} {% block title %}Home{% endblock %} {% block content
+%}
+<div id="center">
+<h1 style="font-size=25px">Hello {{ user.get("name") }}</h1>
+<p>
+    And welcome to Reliability's self service portal.</br>
+    You can see all available self service in the section "SELF SERVICE"</br>
+    See your previous self service requests in "STATUS"</br>
+    If you have any suggestions or feedback for us please let us know in the "SUGGESTIONS" section</br>
+    Thank you! And have a great day!</br>
+</p>
+{% if 'Self_Service_Admins' in roles %}
+<div id="center">
+    <p>
+        Since you are an admin of this site you will have quite a few more options available in the admin section.</br>
+        If you run into any issues please contact Reliability service</br>
+        If you have any questions to the portal please contact Reliability service</br>
+        If you are looking for an extra feature please use the suggestions page to send your suggestion</br>
+    </p>
+</div>
+{% endif %}
+</div>
+
+{% endblock %}

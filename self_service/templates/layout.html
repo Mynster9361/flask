@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel= "stylesheet" href= "{{ url_for('static', filename='styles/main.css') }}">
+    <title>{% block title %}Home{% endblock %}</title>
+  </head>
+  
+  {% block script %} {% endblock %}
+  <body>
+    <nav class="top-bar">
+      <a id="home" href="/">BESTSELLER</a>
+      <div>
+        {% if 'Self_Service_Admins' in roles %}
+        <a id="admin" href="/admin">ADMIN</a>
+        {% endif %}
+        <a id="selfservicehtml" href="/selfservice">SELF SERVICE</a>
+        <a id="status" href="/status">STATUS</a>
+        <a id="suggestions" href="/suggestions">SUGGESTIONS</a>
+        <a id="logout" href="/logout">LOGOUT</a>
+      </div>
+    </nav>
+    {% block content %} {% endblock %}
+  </body>
+</html>

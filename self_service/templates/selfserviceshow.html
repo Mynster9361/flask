@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}
+  Status
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+    <a href="{{ id }}">
+      <div class="row-align-center">
+        <div class="image-wrapper">
+          <img
+            src="{{ image }}"
+            alt="Could not load image"
+          />
+        </div>
+        <div class="card-box">
+          <div class="top-line">
+            <h4><strong>{{ name }}</strong></h4>
+          </div>
+          <div class="card-textbox">
+            <p class="card-textboxbotp">{{ description }}</p>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+
+{% endblock %}
