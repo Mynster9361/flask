@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Admin</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+  </head>
+  <body class="dark">
+    {% include 'navbar.html' %}
+    <div class="container">
+      <h1>Admin</h1>
+      <h2>Create Service</h2>
+      <form action="/create" method="post">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name"><br>
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description" rows="5" cols="50"></textarea><br>
+        <label for="flow">Flow:</label><br>
+        <textarea id="flow" name="flow" rows="5" cols="50"></textarea><br><br>
+        <button type="submit">Create</button>
+      </form> 
+      <h2>Modify Service</h2>
+      <ul>
+        {% for service in services %}
+        <li>
+          <form action="/modify/{{ service.id }}" method="post">
+            <button type="submit">{{ service.name }}</button>
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+      <a href="/self-service">Back to self-service options</a>
+    </div>
+  </body>
+</html>

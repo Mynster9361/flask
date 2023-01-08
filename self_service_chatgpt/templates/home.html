@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+  </head>
+  <body>
+    {% include 'navbar.html' %}
+    <div class="container">
+      <h1>Welcome to the Self-service Website</h1>
+      <p>This website allows you to request access to different resources and make suggestions for improvements to the website.</p>
+      {% if user %}
+        <p>You are logged in as {{ user }}. <a href="/self-service">Click here</a> to view the self-service options available to you.</p>
+      {% else %}
+        <p>To get started, <a href="/login">login</a> to access the self-service options available to you.</p>
+      {% endif %}
+    </div>
+  </body>
+</html>

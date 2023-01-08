@@ -1,0 +1,16 @@
+<nav>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/self-service">Self-service</a></li>
+      <li><a href="/status">Status</a></li>
+      <li><a href="/suggestions">Suggestions</a></li>
+      {% if logged_in %}
+        <li><a href="/logout">Logout</a></li>
+        {% if 'admin' in permissions %}
+          <li><a href="/admin">Admin</a></li>
+        {% endif %}
+      {% else %}
+        <li><a href="/login">Login</a></li>
+      {% endif %}
+    </ul>
+  </nav>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Status</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+  </head>
+  <body class="dark">
+    {% include 'navbar.html' %}
+    <div class="container">
+      <h1>Request Status</h1>
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Service</th>
+          <th>Status</th>
+        </tr>
+        {% for request in requests %}
+        <tr>
+          <td>{{ request.id }}</td>
+          <td>{{ request.service }}</td>
+          <td>{{ request.status }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+      <a href="/self-service">Back to self-service options</a>
+    </div>
+  </body>
+</html>
