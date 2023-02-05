@@ -26,34 +26,212 @@
               
               <label for="SelfService">SelfService:</label>
               <label for="Documentation">
-                Documentation can be seen below the textbox </br>
+                Documentation can be seen below the editor </br>
                 Please note that the fields is presented in the order that you input the fields
               </label>
-              <textarea style="width:100%;height:300px" id="selfserviceaction" name="selfserviceaction" placeholder="Please input your string of text and seperate all options with a new line"></textarea><br>
-              <input type="submit" value="Submit">
+              <div id="selfserviceaction" name="selfserviceaction" style="width:100%;height:500px;"></div>
+              <input type="hidden" name="actionjson" value="somevalue">
+            </br>
+              <input type="submit" onclick="submitData();" value="Submit">
               <label for="Options">You can use the following to create diffrent fields:</label>
               <label for="Options-available" style="word-wrap: break-word">
+<strong>Remember to enclose all your json in {}</strong></br>
 <strong>Text-Box:</strong></br>
-textbox:title="Please input the title of this textbox f.eks. ask user to input something":placeholder="example@domain.com":required="true/false"</br>
+<pre>
+"textbox": {
+  "title": "sometitle",
+  "placeholder": "some placeholder text",
+  "required": true
+}</pre>
+</br>
 <strong>Drop-Down:</strong></br>
-dropdown:title="Some title for your drop down f.eks. please select what you would like in the dropdown":options="'Adobe Photoshop','Adobe Reader','Adobe Aftereffets'":required="true/false"</br>
+<pre>
+"dropdown": {
+  "title": "sometitle",
+  "options": [
+    "Adobe Photoshop",
+    "Adobe Reader",
+    "Adobe After Effects"
+  ],
+  "required": true
+}</pre>
+</br>
 <strong>To make it look into a database table for the options you can leave the options empty and add it like shown here:</strong></br>
-options="":table="tablename"</br>
-Please note that the table needs to be created in the database before it is able to show anything in the selfservice options menu</br>
+<pre>
+"dropdown_db": {
+  "title": "sometitle",
+  "options": {
+    "table": "tablename"
+  },
+  "required": true
+}</pre>
+</br>
 The same can be done with List-View</br>
 <strong>List-View:</strong></br>
-listview:title="Some title for your list view f.eks. please mark what you would like and press the arrow to add it to your request":options="'Adobe Photoshop','Adobe Reader','Adobe Aftereffets'":required="true/false"</br>
+<pre>
+"listview": {
+  "title": "sometitle",
+  "options": [
+    "Adobe Photoshop",
+    "Adobe Reader",
+    "Adobe After Effects"
+  ],
+  "required": true
+}</pre>
+</br>
+<strong>List-View_db:</strong></br>
+<pre>
+"listview_db": {
+  "title": "sometitle",
+  "options": {
+    "table": "tablename"
+  },
+  "required": true
+}</pre>
+</br>
 <strong>Check-Box:</strong></br>
-checkbox:title="Some title for your checkboxes":amount="3":multiselect="false/true":options="'Adobe Photoshop','Adobe Reader','Adobe Aftereffets'":required="true/false"</br>
+<pre>
+"checkbox": {
+  "title": "sometitle",
+  "options": [
+    "Adobe Photoshop",
+    "Adobe Reader",
+    "Adobe After Effects"
+  ],
+  "multiselect": false,
+  "required": true
+}</pre>
+</br>
 <strong>Radio-Buttons:</strong></br>
-radio:title="Some title for your radio buttons":amount="3":options="'Adobe Photoshop','Adobe Reader','Adobe Aftereffets'":required="true/false"</br>
+<pre>
+"radioButtons": {
+  "title": "sometitle",
+  "options": [
+    "Adobe Photoshop",
+    "Adobe Reader",
+    "Adobe After Effects"
+  ],
+  "required": true
+}</pre>
+</br>
 <strong>Date:</strong></br>
-date:title="Some title for your date":full_date_time="false/true":first_run_on_sellected_time="true/false":required="true/false"</br>
-              
+<pre>
+"date": {
+  "title": "sometitle",
+  "date": "2023-06-25T00:00:00.000Z",
+  "runon": true,
+  "required": true
+}</pre>
+</br>
+</br>
+</br>
+<strong>Here is a full example</strong></br>
+<pre>
+{
+  "textbox": {
+    "title": "sometitle",
+    "placeholder": "some placeholder text",
+    "required": true
+  },
+  "dropdown": {
+    "title": "sometitle",
+    "options": [
+      "Adobe Photoshop",
+      "Adobe Reader",
+      "Adobe After Effects"
+    ],
+    "required": true
+  },
+  "dropdown_db": {
+    "title": "sometitle",
+    "options": {
+      "table": "tablename"
+    },
+    "required": true
+  },
+  "listview": {
+    "title": "sometitle",
+    "options": [
+      "Adobe Photoshop",
+      "Adobe Reader",
+      "Adobe After Effects"
+    ],
+    "required": true
+  },
+  "listview_db": {
+    "title": "sometitle",
+    "options": {
+      "table": "tablename"
+    },
+    "required": true
+  },
+  "checkbox": {
+    "title": "sometitle",
+    "options": [
+      "Adobe Photoshop",
+      "Adobe Reader",
+      "Adobe After Effects"
+    ],
+    "multiselect": false,
+    "required": true
+  },
+  "radioButtons": {
+    "title": "sometitle",
+    "options": [
+      "Adobe Photoshop",
+      "Adobe Reader",
+      "Adobe After Effects"
+    ],
+    "required": true
+  },
+  "date": {
+    "title": "sometitle",
+    "date": "2023-06-25T00:00:00.000Z",
+    "runon": true,
+    "required": true
+  }
+}
+</pre>
               </label></br>
             </div>
         </form>
     </div>
   </div>
   </div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.9.6/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+  function submitData() {
+  // Get the Ace editor instance
+  var editor = ace.edit("selfserviceaction");
+
+  // Get the value of the code block
+  var selfserviceactionValue = editor.session.getValue();
+
+  // Set the value of actionjson to the value of the code block
+  document.getElementsByName("actionjson")[0].value = selfserviceactionValue;
+
+  // Submit the form
+  document.forms[0].submit();
+
+    /*document.form.actionjson.value = editor.session.getValue();
+    let actions_json = editor.session.getValue()
+    alert(document.form.actionjson.value);
+    alert(document.getElementById('actionjson').value);
+    /*
+    document.getElementById('actionjson').value = actions_json
+    
+    action="/submitselfservice" method="POST"
+    alert(message);*/
+    
+  }
+    var editor = ace.edit("selfserviceaction");
+    editor.setTheme(
+      "ace/theme/tomorrow_night_bright",
+      "ace/keyboard/vscode"
+      );
+    editor.session.setMode("ace/mode/json");
+    
+</script>
 {% endblock content %}

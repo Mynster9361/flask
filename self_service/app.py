@@ -1,11 +1,11 @@
-import uuid
-import requests
+from werkzeug.middleware.proxy_fix import ProxyFix
 from flask import Flask, render_template, session, request, redirect, url_for
 from flask_session import Session  # https://pythonhosted.org/Flask-Session
 import msal
 import app_config
 from appfunctions import get_users_roles, mysql_create, mysql_view, mysql_view_id, mysql_view_draft, mysql_view_draftid
-import mysql.connector
+import json
+from types import SimpleNamespace
 
 app = Flask(__name__)
 app.config.from_object(app_config)
@@ -15,7 +15,6 @@ Session(app)
 # generate http scheme when this sample is running on localhost,
 # and to generate https scheme when it is deployed behind reversed proxy.
 # See also https://flask.palletsprojects.com/en/1.0.x/deploying/wsgi-standalone/#proxy-setups
-from werkzeug.middleware.proxy_fix import ProxyFix
 
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
@@ -27,17 +26,19 @@ def index():
     roles = get_users_roles(session=session)
     return render_template('index.html', user=session["user"], roles=roles)
 
+
 @app.route("/login")
 def login():
     # Technically we could use empty list [] as scopes to do just sign in,
     # here we choose to also collect end user consent upfront
     session["flow"] = _build_auth_code_flow(scopes=app_config.SCOPE)
-    redirecturlauthflow = auth_url=session["flow"]["auth_uri"]
-    #return render_template("login.html", auth_url=session["flow"]["auth_uri"], version=msal.__version__)
+    redirecturlauthflow = auth_url = session["flow"]["auth_uri"]
+    # return render_template("login.html", auth_url=session["flow"]["auth_uri"], version=msal.__version__)
     return redirect(redirecturlauthflow)
 
 
-@app.route(app_config.REDIRECT_PATH)  # Its absolute URL must match your app's redirect_uri set in AAD
+# Its absolute URL must match your app's redirect_uri set in AAD
+@app.route(app_config.REDIRECT_PATH)
 def authorized():
     try:
         cache = _load_cache()
@@ -51,6 +52,7 @@ def authorized():
         pass  # Simply ignore them
     return redirect(url_for("index"))
 
+
 @app.route("/logout")
 def logout():
     session.clear()  # Wipe out user and its token cache from session
@@ -58,25 +60,30 @@ def logout():
         app_config.AUTHORITY + "/oauth2/v2.0/logout" +
         "?post_logout_redirect_uri=" + url_for("index", _external=True))
 
+
 def _load_cache():
     cache = msal.SerializableTokenCache()
     if session.get("token_cache"):
         cache.deserialize(session["token_cache"])
     return cache
 
+
 def _save_cache(cache):
     if cache.has_state_changed:
         session["token_cache"] = cache.serialize()
+
 
 def _build_msal_app(cache=None, authority=None):
     return msal.ConfidentialClientApplication(
         app_config.CLIENT_ID, authority=authority or app_config.AUTHORITY,
         client_credential=app_config.CLIENT_SECRET, token_cache=cache)
 
+
 def _build_auth_code_flow(authority=None, scopes=None):
     return _build_msal_app(authority=authority).initiate_auth_code_flow(
         scopes or [],
         redirect_uri=url_for("authorized", _external=True))
+
 
 def _get_token_from_cache(scope=None):
     cache = _load_cache()  # This web app maintains one cache per session
@@ -86,7 +93,8 @@ def _get_token_from_cache(scope=None):
         result = cca.acquire_token_silent(scope, account=accounts[0])
         _save_cache(cache)
         return result
-    
+
+
 @app.route('/selfservice')
 def self_service_options():
     if not session.get("user"):
@@ -96,7 +104,7 @@ def self_service_options():
     services = mysql_view()
     # Initialize an empty list to store the rendered HTML for each service
     service_html = []
-    
+
     # Iterate over the list of services
     for service in services:
         service_id = "selfservice/" + str(service[0])
@@ -104,10 +112,12 @@ def self_service_options():
         service_description = service[2]
         service_image_url = '/static/img/Sample_User_Icon.png'
         # Render the HTML template for the service and append it to the list
-        service_html.append(render_template('service_card.html', name=service_name, description=service_description, id=service_id, image=service_image_url))
+        service_html.append(render_template('service_card.html', name=service_name,
+                            description=service_description, id=service_id, image=service_image_url))
         # Render the main HTML template and pass in the list of rendered service HTML
-    
+
     return render_template('selfservice.html', roles=roles, service_html=service_html, header='Self Services')
+
 
 @app.route("/create_selfservice")
 def create_selfservice():
@@ -122,6 +132,7 @@ def create_selfservice():
     data_inserted = False
     return render_template("create_selfservice.html", user=session["user"], roles=roles)
 
+
 @app.route("/draft_selfservice")
 def self_service_draft():
     if not session.get("user"):
@@ -132,7 +143,7 @@ def self_service_draft():
 
     # Initialize an empty list to store the rendered HTML for each service
     service_html = []
-    
+
     # Iterate over the list of services
     for service in services:
         service_id = "draft_selfservice/" + str(service[0])
@@ -140,10 +151,12 @@ def self_service_draft():
         service_description = service[2]
         service_image_url = '/static/img/Sample_User_Icon.png'
         # Render the HTML template for the service and append it to the list
-        service_html.append(render_template('service_card.html', name=service_name, description=service_description, id=service_id, image=service_image_url))
+        service_html.append(render_template('service_card.html', name=service_name,
+                            description=service_description, id=service_id, image=service_image_url))
         # Render the main HTML template and pass in the list of rendered service HTML
-    
+
     return render_template('selfservice.html', roles=roles, service_html=service_html, header='Self Services drafts')
+
 
 @app.route("/draft_selfservice/<service_id>")
 def self_service_draft_id(service_id):
@@ -158,27 +171,24 @@ def self_service_draft_id(service_id):
     service_description = service[0][2]
     service_accessto = service[0][3]
     service_runbookname = service[0][4]
-    service_actions = service[0][5]
+    #service_actions = service[0][5]
     service_approved = service[0][6]
     service_created = service[0][7]
     service_html = ''
-    for action in service_actions.split('\n'):
-        #print(action)
-        print('___________')
-        list = action.split(':')
-        for element in list:
-            print(element)
-            key, value = element.split('=')[0], element.split('=')[1]
-            print('___________')
-            print(key)
-            print(value)
-            print('___________')
-    
-    #print(service_actions.split('\n')[0])
-    #print(service_actions.split('\n')[1])
-    #print(service_actions.split('\n')[2])
+
+    person_dict = json.dumps(service_actions)
+    x = json.loads(person_dict)
+
+    print(person_dict)
+    print((x["textbox"]["title"]))
+    print((x.values()))
+
+
+
     # Render the service template with the service data
-    return render_template('view_draft.html', name=service_name, description=service_description, service_actions=service_actions)
+    return render_template('view_draft.html')
+# convert the following json table into a html site using python flask
+
 
 @app.route("/modify_selfservice")
 def modify_selfservice():
@@ -194,7 +204,7 @@ def modify_selfservice():
 
     # Initialize an empty list to store the rendered HTML for each service
     service_html = []
-    
+
     # Iterate over the list of services
     for service in services:
         service_id = "modify_selfservice/" + str(service[0])
@@ -204,8 +214,9 @@ def modify_selfservice():
         # Render the HTML template for the service and append it to the list
         service_html.append(render_template('service_card.html', name=service_name, description=service_description, id=service_id, image=service_image_url))
         # Render the main HTML template and pass in the list of rendered service HTML
-    
+
     return render_template('selfservice.html', roles=roles, service_html=service_html, header='Please select the self service you would like to modify')
+
 
 @app.route('/submit', methods=['POST'])
 def submit_suggestion():
@@ -219,6 +230,8 @@ def submit_suggestion():
 
 # Set the flag variable to False initially
 data_inserted = False
+
+
 @app.route('/submitselfservice', methods=['POST'])
 def submitselfservice():
     # do something with my_variable
@@ -230,7 +243,7 @@ def submitselfservice():
     self_service_description = request.form['description']
     self_service_Access = request.form['AccessTo']
     self_service_Runbook = request.form['Runbook']
-    self_service_selfserviceaction = request.form['selfserviceaction']
+    self_service_selfserviceaction = request.form['actionjson']
     usersemail = session.get("user").get("preferred_username")
     # Declare the data_inserted variable as global
     global data_inserted
@@ -243,19 +256,31 @@ def submitselfservice():
 
     return render_template('submitselfservice.html', roles=roles, self_service_name=self_service_name)
 
+
+@app.route('/viewselfservice')
+def viewselfservice():
+    if not session.get("user"):
+        return redirect(url_for("login"))
+    # Retrieve the suggestions from the database or file here
+    roles = get_users_roles(session=session)
+    return render_template('viewselfservice.html', roles=roles)  # , suggestions=suggestions
+
+
 @app.route('/suggestions')
 def view_suggestions():
     if not session.get("user"):
         return redirect(url_for("login"))
     # Retrieve the suggestions from the database or file here
     roles = get_users_roles(session=session)
-    return render_template('suggestions.html', roles=roles) #, suggestions=suggestions
+    return render_template('suggestions.html', roles=roles)  # , suggestions=suggestions
+
 
 class Request:
     def __init__(self, id, subject, status):
         self.id = id
         self.subject = subject
         self.status = status
+
 
 @app.route("/status")
 def status():
@@ -268,6 +293,7 @@ def status():
     roles = get_users_roles(session=session)
     return render_template("status.html", items=requests, roles=roles)
 
+
 @app.route("/admin")
 def admin():
     if not session.get("user"):
@@ -278,13 +304,15 @@ def admin():
         return redirect(url_for("unauthorized"))
     return render_template("admin.html", user=session["user"], roles=roles)
 
+
 @app.route("/unauthorized")
 def unauthorized():
     if not session.get("user"):
         return redirect(url_for("login"))
     roles = get_users_roles(session=session)
     return render_template("unauthorized.html", user=session["user"], roles=roles)
-        
+
+
 @app.route('/selfservice/<int:self_service_id>')
 def self_service_show(self_service_id):
     if not session.get("user"):
@@ -295,7 +323,7 @@ def self_service_show(self_service_id):
     #! TODO after new self service template/creation is in place look into the page showing the self service sample code is added here.
     # Initialize an empty list to store the rendered HTML for each service
     service_html = []
-    
+
     # Iterate over the list of services
     for service in services:
         service_id = service[0]
@@ -305,11 +333,11 @@ def self_service_show(self_service_id):
         # Render the HTML template for the service and append it to the list
         service_html.append(render_template('service_card.html', name=service_name, description=service_description, id=service_id, image=service_image_url))
         # Render the main HTML template and pass in the list of rendered service HTML
-    
+
     return render_template('selfservice.html', roles=roles, service_html=service_html)
+
 
 app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)  # Used in template
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=80)
-
+    app.run(host="0.0.0.0", port=80, debug=True)

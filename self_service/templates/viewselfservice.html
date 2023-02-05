@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      /* Some basic styling for the page */
+      body {
+        font-family: sans-serif;
+      }
+      .form-element {
+        margin-bottom: 10px;
+      }
+      .form-element label {
+        display: block;
+        font-weight: bold;
+      }
+      .form-element input[type="text"],
+      .form-element select,
+      .form-element textarea {
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 8px;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        resize: vertical;
+      }
+      .form-element input[type="checkbox"],
+      .form-element input[type="radio"] {
+        margin-top: 16px;
+      }
+      .form-element .error {
+        color: red;
+        font-size: 80%;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="form">
+      <!-- Placeholder for the form elements -->
+      <div id="form-elements"></div>
+    </form>
+
+    <script>
+      // JSON data
+      var data = {
+        "textbox": {
+          "title": "sometitle",
+          "placeholder": "some placeholder text",
+          "required": true
+        },
+        "dropdown": {
+          "title": "sometitle",
+          "options": [
+            "Adobe Photoshop",
+            "Adobe Reader",
+            "Adobe After Effects"
+          ],
+          "required": true
+        },
+        "dropdown_db": {
+          "title": "sometitle",
+          "options": {
+            "table": "tablename"
+          },
+          "required": true
+        },
+        "listview": {
+          "title": "sometitle",
+          "options": [
+            "Adobe Photoshop",
+            "Adobe Reader",
+            "Adobe After Effects"
+          ],
+          "required": true
+        },
+        "listview_db": {
+          "title": "sometitle",
+          "options": {
+            "table": "tablename"
+          },
+          "required": true
+        },
+        "checkbox": {
+          "title": "sometitle",
+          "options": [
+            "Adobe Photoshop",
+            "Adobe Reader",
+            "Adobe After Effects"
+          ],
+          "multiselect": false,
+          "required": true
+        },
+        "radioButtons": {
+          "title": "sometitle",
+          "options": [
+            "Adobe Photoshop",
+            "Adobe Reader",
+            "Adobe After Effects"
+          ],
+          "required": true
+        },
+        "date": {
+            "title": "sometitle",
+            "date": "2023-06-25T00:00:00.000Z",
+            "runon": true,
+            "required": true
+          }
+          };
+          
+          // Function to create form elements based on the JSON data
+          function createFormElements(data) {
+            // Get the form element container
+            var formElements = document.getElementById("form-elements");
+          
+            // Loop through the data object
+            for (var key in data) {
+              // Create a container for the form element
+              var formElement = document.createElement("div");
+              formElement.classList.add("form-element");
+          
+              // Create a label for the form element
+              var label = document.createElement("label");
+              label.innerHTML = data[key]["title"];
+              formElement.appendChild(label);
+          
+              // Create the form element based on the type
+              if (key === "textbox") {
+                // Textbox
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = key;
+                input.placeholder = data[key]["placeholder"];
+                input.required = data[key]["required"];
+                formElement.appendChild(input);
+              } else if (key === "dropdown" || key === "dropdown_db") {
+                // Dropdown
+                var select = document.createElement("select");
+                select.name = key;
+                select.required = data[key]["required"];
+          
+                if (data[key]["options"] instanceof Array) {
+                  // Static options
+                  data[key]["options"].forEach(function(option) {
+                    var optionElement = document.createElement("option");
+                    optionElement.value = option;
+                    optionElement.innerHTML = option;
+                    select.appendChild(optionElement);
+                  });
+                } else {
+                  // Options from database
+                  // (Assuming the options are already fetched and available in a variable called "dbOptions")
+                  dbOptions.forEach(function(option) {
+                    var optionElement = document.createElement("option");
+                    optionElement.value = option.id;
+                    optionElement.innerHTML = option.name;
+                    select.appendChild(optionElement);
+                  });
+                }
+          
+                formElement.appendChild(select);
+              } else if (key === "listview" || key === "listview_db") {
+                // List view
+                var list = document.createElement("ul");
+                list.name = key;
+
+                if (data[key]["options"] instanceof Array) {
+                    // Static options
+                    data[key]["options"].forEach(function(option) {
+                      var listItem = document.createElement("li");
+                      var input = document.createElement("input");
+                      input.type = "radio";
+                      input.name = key;
+                      input.value = option;
+                      input.required = data[key]["required"];
+                      listItem.appendChild(input);
+                      listItem.innerHTML += option;
+                      list.appendChild(listItem);
+                    });
+                  } else {
+                    // Options from database
+                    // (Assuming the options are already fetched and available in a variable called "dbOptions")
+                    dbOptions.forEach(function(option) {
+                      var listItem = document.createElement("li");
+                      var input = document.createElement("input");
+                      input.type = "radio";
+                      input.name = key;
+                      input.value = option.id;
+                      input.required = data[key]["required"];
+                      listItem.appendChild(input);
+                      listItem.innerHTML += option.name;
+                      list.appendChild(listItem);
+                    });
+                  }
+                  formElement.appendChild(list);
+                  } else if (key === "checkbox") {
+                    // Checkbox
+                    data[key]["options"].forEach(function(option) {
+                      var label = document.createElement("label");
+                      var input = document.createElement("input");
+                      input.type = "checkbox";
+                      input.name = key;
+                      input.value = option;
+                      input.required = data[key]["required"];
+                      label.appendChild(input);
+                      label.innerHTML += option;
+                      formElement.appendChild(label);
+                    });
+                  } else if (key === "radioButtons") {
+                    // Radio buttons
+                    data[key]["options"].forEach(function(option) {
+                      var label = document.createElement("label");
+                      var input = document.createElement("input");
+                      input.type = "radio";
+                      input.name = key;
+                      input.value = option;
+                      input.required = data[key]["required"];
+                      label.appendChild(input);
+                      label.innerHTML += option;
+                      formElement.appendChild(label);
+                    });
+                  } else if (key === "date") {
+                    // Date
+                    var input = document.createElement("input");
+                    input.type = "date";
+                    input.name = key;
+                    input.min = data[key]["date"];
+                    input.required = data[key]["required"];
+                    formElement.appendChild(input);
+                  }
+                  
+                  // Add the form element to the container
+                  formElements.appendChild(formElement);
+                  }
+                  }
+                  
+// Initialize the form
+createFormElements(data);
+
+// Add some basic validation to the form
+document.getElementById("form").addEventListener("submit", function(event) {
+  // Get all form elements
+  var elements = this.elements;
+
+  // Loop through the elements
+  for (var i = 0; i < elements.length; i++) {
+    // Check if the element is required and empty
+    if (elements[i].required && elements[i].value === "") {
+      // Prevent the form from being submitted
+      event.preventDefault();
+
+      // Show an error message
+      var errorMessage = document.createElement("div");
+      errorMessage.classList.add("error");
+      errorMessage.innerHTML = "This field is required";
+      elements[i].parentNode.insertBefore(errorMessage, elements[i]);
+    }
+  }
+});
+</script>
+</body>
+</html>
+
+                  
