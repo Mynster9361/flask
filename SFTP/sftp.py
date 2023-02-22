@@ -10,7 +10,7 @@ USERNAME = ''
 PASSWORD = ''
 
 # Set the path to the subfolder on the SFTP server
-SUBFOLDER_PATH = ''
+SUBFOLDER_PATH = '/'
 
 # Set the interval in minutes between checks
 CHECK_INTERVAL = 1
@@ -66,7 +66,7 @@ def check_sftp():
         time.sleep(CHECK_INTERVAL * 1)
 
 # Create and start the threads
-num_threads = 20
+num_threads = 230
 threads = []
 for i in range(num_threads):
     t = threading.Thread(target=check_sftp)

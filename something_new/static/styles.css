@@ -1,0 +1,71 @@
+body {
+  background-color: #222222;
+}
+.center {
+  color: #ffffff;
+  position: absolute;
+  margin-top: 1%;
+  margin-bottom: 10px;
+  min-height: 850px;
+  width: 50%;
+  transform: translate(50%, 0%);
+  background-color: rgb(100, 100, 100);
+  border-radius: 50px;
+  word-wrap: break-word;
+  padding: 15px;
+}
+h1 {
+  text-align: center;
+  color: #ffffff;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+hr.solid {
+  border-top: 3px solid #bbb;
+  margin: 30px;
+}
+input {
+  margin-left: 5%;
+  position: ;
+}
+label {
+  color: #ffffff;
+  margin-left: 50px;
+}
+select {
+  margin-left: 63px;
+  width: 125px;
+}
+/* Create two equal columns that floats next to each other */
+.column {
+  margin-left: 10%;
+  float: left;
+  width: 30%;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+button {
+  background-color: #363636;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  width: 75px;
+  height: 25px;
+  margin-top: 1%;
+  margin-left: 40%;
+  cursor: pointer;
+}
+.final {
+  margin-left: 33%;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  width: 50%;
+  height: 25px;
+  color: white;
+  border: none;
+}
