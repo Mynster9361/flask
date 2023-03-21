@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<h4>Vulnerabilities: The table is updated every 10 min</h4>
+
+  <table id="vuln-table" class="table table-hover table-dark">
+    <thead>
+      <tr>
+        <th>CVE Number</th>
+        <th>Title</th>
+        <th data-sort-type="number">CVSS Score</th>
+        <th>Release Number</th>
+        <th>Vulnerability Type</th>
+        <th>Latest Revision Date</th>
+        <th>Publicly Disclosed</th>
+        <th>Exploited</th>
+        <th>Latest Software Release</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for vuln in vulnerabilities %}
+      <tr>
+        <td><a href="{{ vuln['mitreUrl'] }}">{{ vuln['cveNumber'] }}</td>
+        <td>{{ vuln['cveTitle'] }}</td>
+        <td>{{ vuln.get('baseScore', 'N/A') }}</td>
+        <td>{{ vuln['releaseNumber'] }}</td>
+        <td>{{ vuln['vulnType'] }}</td>
+        <td>{{ vuln['latestRevisionDate'] }}</td>
+        <td>{{ vuln.get('publiclyDisclosed', 'N/A') }}</td>
+        <td>{{ vuln.get('exploited', 'N/A') }}</td>
+        <td>{{ vuln.get('latestSoftwareRelease', 'N/A') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock content %}
+{% block scripts %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function() {
+      $('#vuln-table').DataTable({
+        "pageLength": 25,
+        order: [[5, "desc"]]
+      });
+      $('#items-per-page').val('25');
+    });
+  </script>
+  <style>
+    .dataTables_wrapper .dataTables_filter input {
+      color: #fff;
+      background-color: #212529;
+      border-radius: 10px;
+    }
+    .dataTables_wrapper .dataTables_length select {
+      color: #fff;
+      background-color: #212529;
+      border-radius: 10px;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+      border-radius: 10px;
+    }
+  </style>
+{% endblock scripts %}

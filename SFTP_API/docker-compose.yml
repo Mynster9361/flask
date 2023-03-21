@@ -1,0 +1,11 @@
+version: "3"
+services:
+  my_fastapi_filetransfer:
+    build: ./
+    ports:
+      - 8000:8000
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Europe/London
+    command: "uvicorn src.app:app --host=0.0.0.0 --reload"

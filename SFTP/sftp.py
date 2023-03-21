@@ -66,7 +66,7 @@ def check_sftp():
         time.sleep(CHECK_INTERVAL * 1)
 
 # Create and start the threads
-num_threads = 230
+num_threads = 200
 threads = []
 for i in range(num_threads):
     t = threading.Thread(target=check_sftp)

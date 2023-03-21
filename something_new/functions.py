@@ -35,9 +35,9 @@ def RandomPassword(pwd_length, Symbols, Numbers, Letters, Upper, Lower, noambigu
     return(pwd)
 
 def OulookSignature(email):
-    command = """$appid = "730bcbdb-aa50-45b6-877a-02a76b398e0b"
-Connect-ExchangeOnline -AppId $appid -CertificateThumbprint "47A891A1A3771D90137B091D271F22D1C9AD5F22" -Organization "Mynster9361.onmicrosoft.com"
-get-MailboxMessageConfiguration -Identity "Morten@Mynster-IT.dk" | Select-Object -ExpandProperty SignatureHtml"""
+    command = """$appid = ""
+Connect-ExchangeOnline -AppId $appid -CertificateThumbprint "" -Organization ".onmicrosoft.com"
+get-MailboxMessageConfiguration -Identity "" | Select-Object -ExpandProperty SignatureHtml"""
     subprocess.Popen(["powershell","& {" + command+ "}"], stdin=subprocess.PIPE,stdout=subprocess.PIPE, shell=True)
     stdout_value = process.communicate()[0]
     return stdout_value

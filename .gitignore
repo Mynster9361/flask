@@ -3,3 +3,5 @@
 /self_service/flask_session/
 /flask_session/
 /something_new/__pycache__/
+/*/__pycache__/
+/*/*/__pycache__/
